@@ -3,18 +3,24 @@ const app = express();
 var fs = require('fs');
 const puppeteer = require('puppeteer')
 const path = require('path');
+var querystring = require('querystring');
+var http = require('http');
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
-app.use(express.bodyParser({limit: '20mb'})); 
+app.use(bodyParser.urlencoded({
+	extended: false,
+	limit: '20mb'
+}));
+// app.use(express.bodyParser({limit: '20mb'})); 
 var dir = './pdf';
 if (!fs.existsSync(dir)){
   fs.mkdirSync(dir);
 }
 var dir = './pdf';
-//TODO Post Body Limit set :10,20MB
 //TODO pass headers and allow only if there is server key set
 
 // Pdf Generation Code Start 
+
 function randName() {
 	var text = "";
 	var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -23,21 +29,58 @@ function randName() {
 	}
 	return text;
 }
-// app.post('') // post the
-
-async function printPDF() {
+async function printPDF(html,projectname) {
   const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
-  await page.goto('https://blog.risingstack.com', {waitUntil: 'networkidle0'});
+  await page.goto(html, {waitUntil: 'networkidle0'});
   const pdf = await page.pdf(
       { format: 'A4',
-        path :'./pdf/' + randName() + '.pdf'  
+        path :'./pdf/' + projectname  
       }
       );
   await browser.close();
   return pdf
 }
 
+app.post('/pdfCreation',async (req,res)=>{
+  try {
+    var html = req.body.html;
+    var projectname = randName() + '.pdf';
+    // var html = 'https://blog.risingstack.com';
+    // var projectname = randName() + '.pdf';
+  let pdffile =  await printPDF(html, projectname)
+
+  }catch(error){
+console.log(error)
+  }
+})
+
+ // Build the post string from an object
+
+
+  
+app.get('/pdf/:fileName', function (req, res) {
+
+	if (req.params.fileName.startsWith('{{')){
+		res.sendFile(__dirname + '/pdf/');
+	}else{
+		res.sendFile(__dirname + '/pdf/' + req.params.fileName);
+	}
+	
+});
+// app.post('/pdfCreation',async (req,res)=>{
+//   try {
+//     var html = req.body.html,
+//     projectname = req.body.projectname;
+
+//     // projectname = randName() +'.pdf';
+
+    
+
+//   }catch(error){
+// console.log(error)
+//   }
+// })
 // printPDF()
 
 
