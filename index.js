@@ -3,7 +3,6 @@ const app = express();
 var fs = require('fs');
 const puppeteer = require('puppeteer')
 const path = require('path');
-var querystring = require('querystring');
 var http = require('http');
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
@@ -29,33 +28,45 @@ function randName() {
 	}
 	return text;
 }
-async function printPDF(html,projectname) {
+
+async function printPDF(html, projectname) {
   const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
+console.log('start Pdf')
   await page.goto(html, {waitUntil: 'networkidle0'});
   const pdf = await page.pdf(
       { format: 'A4',
-        path :'./pdf/' + projectname  
+        path :'./pdf/' + projectname
       }
       );
+      console.log('End Pdf')
   await browser.close();
   return pdf
 }
 
+app.get('/', async (req, res) => {
+  res.send('ok')
+})
+// printPDF()
 app.post('/pdfCreation',async (req,res)=>{
-  try {
-    var html = req.body.html;
+  try {  
+    let temp = path.join(__dirname, '/template/template.html')
+    let htmlTemplate = fs.readFileSync(temp, 'utf8')
+    fs.writeFileSync(path.join(__dirname +'/template/template.html'),htmlTemplate);
+		let html =`file://${__dirname}` +'/template/template.html';
     var projectname = randName() + '.pdf';
-    // var html = 'https://blog.risingstack.com';
-    // var projectname = randName() + '.pdf';
-  let pdffile =  await printPDF(html, projectname)
-
+    // console.log('Start')
+    let pdffile =  await printPDF(html, projectname)
+      res.status(200).json({
+        "message": 'here',
+        "success": true,
+        fileName: projectname
+      });
+console.log('End')
   }catch(error){
 console.log(error)
   }
 })
-
- // Build the post string from an object
 
 
   
@@ -68,33 +79,12 @@ app.get('/pdf/:fileName', function (req, res) {
 	}
 	
 });
-// app.post('/pdfCreation',async (req,res)=>{
-//   try {
-//     var html = req.body.html,
-//     projectname = req.body.projectname;
-
-//     // projectname = randName() +'.pdf';
-
-    
-
-//   }catch(error){
-// console.log(error)
-//   }
-// })
-// printPDF()
 
 
 // Pdf Generation Code End 
-app.listen(6000);
-console.log(6000 + ' is the magic port'); 
+app.listen(5100, function(){
+  console.log(5100 + ' is the magic port'); 
+});
 
 
-// extra Stuff 
-//   await page.setRequestInterception(true);
-//   page.on('request', intercepted_request => {
-//     if (intercepted_request.url().includes('google-analytics') || intercepted_request.url().includes('facebook')) {
-//       intercepted_request.abort();
-//     } else {
-//       intercepted_request.continue();
-//     }
-//   });
+
