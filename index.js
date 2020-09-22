@@ -30,7 +30,19 @@ function randName() {
 }
 
 async function printPDF(html, projectname) {
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({	args: [
+    // '--no-sandbox', '--disable-setuid-sandbox'
+    '--headless', 
+     '--no-sandbox','--no-gpu','--disable-setuid-sandbox'
+    // '--no-sandbox',
+    // '--disable-setuid-sandbox',
+    // '--disable-dev-shm-usage',
+    // '--disable-accelerated-2d-canvas',
+    // '--no-first-run',
+    // '--no-zygote',
+
+    // '--disable-gpu'
+  ]});
   const page = await browser.newPage();
 console.log('start Pdf')
   await page.goto(html, {waitUntil: 'networkidle0'});
