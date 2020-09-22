@@ -30,7 +30,9 @@ function randName() {
 }
 
 async function printPDF(html, projectname) {
-  const browser = await puppeteer.launch({	args: [
+  const browser = await puppeteer.launch({
+    ignoreDefaultArgs: ['--disable-extensions'],
+    args: [
     // '--no-sandbox', '--disable-setuid-sandbox'
     '--headless', 
      '--no-sandbox','--no-gpu','--disable-setuid-sandbox'
