@@ -34,9 +34,20 @@ async function printPDF(html, projectname) {
   const page = await browser.newPage();
 console.log('start Pdf')
   await page.goto(html, {waitUntil: 'networkidle0'});
+  await page.addStyleTag({
+    content: '@page {size: A4 portait;}'
+});
   const pdf = await page.pdf(
-      { format: 'A4',
-        path :'./pdf/' + projectname
+      { 
+        format: 'A4',
+        path :'./pdf/' + projectname,
+        printBackground: true,
+        margin: {
+          top: 0,
+          right: 20,
+          bottom: 0,
+          left: 20,
+        },
       }
       );
       console.log('End Pdf')
