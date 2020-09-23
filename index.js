@@ -12,8 +12,12 @@ app.use(bodyParser.urlencoded({
 }));
 // app.use(express.bodyParser({limit: '20mb'})); 
 var dir = './pdf';
+var dir2 = './templatenew';
 if (!fs.existsSync(dir)){
   fs.mkdirSync(dir);
+}
+if (!fs.existsSync(dir2)){
+  fs.mkdirSync(dir2);
 }
 var dir = './pdf';
 //TODO pass headers and allow only if there is server key set
@@ -76,11 +80,14 @@ app.get('/', async (req, res) => {
 // printPDF()
 app.post('/pdfCreation',async (req,res)=>{
   try {  
-    let temp = path.join(__dirname, '/template/template.html')
+    // let temp = path.join(__dirname, '/template/template.html')
+    let temp = 'https://s3-eu-west-1.amazonaws.com/htmlpdfapi.production/free_html5_invoice_templates/example1/index.html'
     let htmlTemplate = fs.readFileSync(temp, 'utf8')
-    fs.writeFileSync(path.join(__dirname +'/template/template.html'),htmlTemplate);
-		let html =`file://${__dirname}` +'/template/template.html';
-    var projectname = randName() + '.pdf';
+    let newname = randName()
+    fs.writeFileSync(path.join(__dirname +'/templatenew/'+newname+ '.html'),htmlTemplate);
+  
+		let html =`file://${__dirname}` +'/templatenew/'+newname+ '.html';
+    var projectname = newname + '.pdf';
     // console.log('Start')
     let pdffile =  await printPDF(html, projectname)
       res.status(200).json({
