@@ -80,7 +80,7 @@ app.get('/', async (req, res) => {
 // printPDF()
 app.post('/pdfCreation',async (req,res)=>{
   try {  
-    // let temp = path.join(__dirname, '/template/template.html')
+    let temp = path.join(__dirname, '/template/template.html')
     // let temp = req.body.html
     let temp = 'https://s3-eu-west-1.amazonaws.com/htmlpdfapi.production/free_html5_invoice_templates/example1/index.html'
     let htmlTemplate = fs.readFileSync(temp, 'utf8')
