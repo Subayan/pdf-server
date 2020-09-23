@@ -4,6 +4,7 @@ var fs = require('fs');
 const puppeteer = require('puppeteer')
 const path = require('path');
 var http = require('http');
+// var  util = require("util");
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
 const multer = require('multer');
@@ -78,49 +79,50 @@ console.log('start Pdf')
 app.get('/', async (req, res) => {
   res.send('ok')
 })
-var profileStorage = multer.diskStorage({
-	destination: function (req, file, cb) {
-		console.log(file.originalname);
-		cb(null, './template');
-	},
+// var profileStorage = multer.diskStorage({
+// 	destination: function (req, file, cb) {
+// 		console.log(file.originalname);
+// 		cb(null, './template');
+// 	},
 	
-	filename: function (req, file, cb) {
-		var extension = file.originalname.split('.').pop();
-		console.log(file.originalname);
-		cb(null, file.originalname );
-	}
-});
-var fileUplaod = multer({
-	storage: profileStorage
-}).single('file');
-app.post('/fileupload'  ,function (req, res) {
-	fileUplaod(req, res, function (err, file) {
-		if (err) {
-			console.log(err);
-			return res.status(400).json({
-				status: false,
-				message:err.toString()
-			})
+// 	filename: function (req, file, cb) {
+// 		var extension = file.originalname.split('.').pop();
+// 		console.log(file.originalname);
+// 		cb(null, file.originalname );
+// 	}
+// });
+// var fileUplaod = multer({
+// 	storage: profileStorage
+// }).single('file');
+// app.post('/fileupload'  ,function (req, res) {
+// 	fileUplaod(req, res, function (err, file) {
+// 		if (err) {
+// 			console.log(err);
+// 			return res.status(400).json({
+// 				status: false,
+// 				message:err.toString()
+// 			})
 			
-		}
-		res.status(200).json({
-			success: true,
-			message: 'File has been uploaded',
-			fileName: req.file.filename
-		})
-	});
-});
+// 		}
+// 		res.status(200).json({
+// 			success: true,
+// 			message: 'File has been uploaded',
+// 			fileName: req.file.filename
+// 		})
+// 	});
+// });
 // printPDF()
 app.post('/pdfCreation',async (req,res)=>{
   try {  
-    let temp = path.join(__dirname, '/template/template.html')
-    // let temp = req.body.html
-    // let temp = 'https://s3-eu-west-1.amazonaws.com/htmlpdfapi.production/free_html5_invoice_templates/example1/index.html'
-    let htmlTemplate = fs.readFileSync(temp, 'utf8')
-    let newname = randName()
-    fs.writeFileSync(path.join(__dirname +'/templatenew/'+newname+ '.html'),htmlTemplate);
+    // let temp = path.join(__dirname, '/template/template.html')
+    // let htmlTemplate = fs.readFileSync(temp)
+    // let newname = randName()
+    // fs.writeFileSync(path.join(__dirname +'/templatenew/'+newname+ '.html'),htmlTemplate);
   
-		let html =`file://${__dirname}` +'/templatenew/'+newname+ '.html';
+    // // let html = fs.writeFileSync(path.join(__dirname +'/templatenew/'+newname+ '.html'),htmlTemplate);;
+    // let html =`file://${__dirname}` +'/templatenew/'+newname+ '.html';
+   let html = req.body.html
+    console.log(html)
     var projectname = newname + '.pdf';
     // console.log('Start')
     let pdffile =  await printPDF(html, projectname)
@@ -130,6 +132,8 @@ app.post('/pdfCreation',async (req,res)=>{
         fileName: projectname
       });
 console.log('End')
+
+
   }catch(error){
 console.log(error)
   }
