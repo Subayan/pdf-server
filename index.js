@@ -116,7 +116,7 @@ app.post('/pdfCreation',async (req,res)=>{
   try {  
     // let temp = path.join(__dirname, '/template/template.html')
     // let htmlTemplate = fs.readFileSync(temp)
-    // let newname = randName()
+    let newname = randName()
     // fs.writeFileSync(path.join(__dirname +'/templatenew/'+newname+ '.html'),htmlTemplate);
   
     // // let html = fs.writeFileSync(path.join(__dirname +'/templatenew/'+newname+ '.html'),htmlTemplate);;
