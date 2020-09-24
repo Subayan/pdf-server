@@ -4,7 +4,7 @@ var fs = require('fs');
 const puppeteer = require('puppeteer')
 const path = require('path');
 var http = require('http');
-// var  util = require("util");
+var  util = require("util");
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
 const multer = require('multer');
@@ -54,7 +54,8 @@ async function printPDF(html, projectname) {
   ]});
   const page = await browser.newPage();
 console.log('start Pdf')
-  await page.goto(html, {waitUntil: 'networkidle0'});
+  // await page.goto(html, {waitUntil: 'networkidle0'});
+  await page.setContent(html)
   await page.addStyleTag({
     content: '@page {size: A4 portait;}'
 });
@@ -81,14 +82,33 @@ app.get('/', async (req, res) => {
 })
 app.post('/pdfCreation',async (req,res)=>{
   try {  
+    let html = req.body.html
+         let newname = randName()
+    fs.writeFileSync(path.join(__dirname +'/templatenew/'+newname+ '.html'),html);
+    // let html = data
+    console.log(html)
+    var projectname = newname + '.pdf';
+      printPDF(html, projectname)
+      res.status(200).json({
+        "message": 'here',
+        "success": true,
+        fileName: projectname
+      });
+     
+  
+  }catch(error){
+console.log(error)
+  }
+})
+
+app.post('/pdfCreation2',async (req,res)=>{
+  try {  
     let temp = path.join(__dirname, '/template/template.html')
     let htmlTemplate = fs.readFileSync(temp)
     let newname = randName()
     fs.writeFileSync(path.join(__dirname +'/templatenew/'+newname+ '.html'),htmlTemplate);
-  
     // let html = fs.writeFileSync(path.join(__dirname +'/templatenew/'+newname+ '.html'),htmlTemplate);;
     let html =`file://${__dirname}` +'/templatenew/'+newname+ '.html';
-  //  let html = req.body.html
     console.log(html)
     var projectname = newname + '.pdf';
     // console.log('Start')
@@ -98,15 +118,11 @@ app.post('/pdfCreation',async (req,res)=>{
         "success": true,
         fileName: projectname
       });
-console.log('End')
-
 
   }catch(error){
 console.log(error)
   }
 })
-
-
   
 app.get('/pdf/:fileName', function (req, res) {
 
