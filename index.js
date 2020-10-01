@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-
+var myCustomFS = require('rimraf')
 require('dotenv').config({})
 var fs = require('fs');
 const puppeteer = require('puppeteer')
@@ -8,6 +8,7 @@ const path = require('path');
 var http = require('http');
 var util = require("util");
 var bodyParser = require('body-parser');
+var cron = require('node-cron');
 
 const multer = require('multer');
 app.use(bodyParser.json());
@@ -94,7 +95,32 @@ app.use((req,res,next)=>{
   }
   
 })
+cron.schedule('*/30 * * * * *', () => {
+// cron.schedule('0 1 * * *', () => {
+console.log("nbsajdjsad")
+var uploadsDir = __dirname + '/templatenew';
+var uploadsDir1 = __dirname + '/pdf';
+fs.readdir(uploadsDir, (err, files) => {
+        if (err) throw err;
 
+        for (const file of files) {
+          fs.unlink(path.join(uploadsDir, file), err => {
+            if (err) throw err;
+     
+          });
+        }
+      });
+      fs.readdir(uploadsDir1, (err, files) => {
+        if (err) throw err;
+
+        for (const file of files) {
+          fs.unlink(path.join(uploadsDir, file), err => {
+            if (err) throw err;
+      
+          });
+        }
+      });
+})
 app.post('/pdfCreation', async (req, res) => {
   try {
     let html = req.body.html
