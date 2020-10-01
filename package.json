@@ -19,15 +19,10 @@
   "homepage": "https://github.com/Subayan/pdf-server#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
-<<<<<<< HEAD
-    "multer": "^1.4.2",
-    "puppeteer": "^5.3.0"
-=======
-    "puppeteer": "^5.3.1"
     "multer": "^1.4.2",
     "puppeteer": "^5.3.0",
     "util": "^0.12.3"
->>>>>>> 8d58d178c4e137d3e1ebf6d818bad28d4003e67d
   }
 }
