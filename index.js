@@ -105,32 +105,32 @@ app.use((req,res,next)=>{
   
 })
 // cron.schedule('*/30 * * * * *', () => {
-cron.schedule('0 2 * * *', () => {  
-   // every day at 2 am
-console.log("start ")
-var uploadsDir = __dirname + '/templatenew';
-var uploadsDir1 = __dirname + '/pdf';
-fs.readdir(uploadsDir, (err, files) => {
-        if (err) throw err;
+// cron.schedule('0 2 * * *', () => {  
+//    // every day at 2 am
+// console.log("start ")
+// var uploadsDir = __dirname + '/templatenew';
+// var uploadsDir1 = __dirname + '/pdf';
+// fs.readdir(uploadsDir, (err, files) => {
+//         if (err) throw err;
 
-        for (const file of files) {
-          fs.unlink(path.join(uploadsDir, file), err => {
-            if (err) throw err;
+//         for (const file of files) {
+//           fs.unlink(path.join(uploadsDir, file), err => {
+//             if (err) throw err;
      
-          });
-        }
-      });
-      fs.readdir(uploadsDir1, (err, files1) => {
-        if (err) throw err;
+//           });
+//         }
+//       });
+//       fs.readdir(uploadsDir1, (err, files1) => {
+//         if (err) throw err;
 
-        for (const file of files1) {
-          fs.unlink(path.join(uploadsDir1, file), err => {
-            if (err) throw err;
+//         for (const file of files1) {
+//           fs.unlink(path.join(uploadsDir1, file), err => {
+//             if (err) throw err;
       
-          });
-        }
-      });
-})
+//           });
+//         }
+//       });
+// })
 app.post('/pdfCreation', async (req, res) => {
   try {
     let html = req.body.html
