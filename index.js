@@ -25,7 +25,7 @@ if (!fs.existsSync(dir)) {
 if (!fs.existsSync(dir2)) {
   fs.mkdirSync(dir2);
 }
-var dir = './pdf';
+// var dir = './pdf';
 //TODO pass headers and allow only if there is server key set
 
 // Pdf Generation Code Start 
@@ -64,9 +64,11 @@ async function printPDF(html, projectname) {
   await page.addStyleTag({
     content: '@page {size: A4 portait;}'
   });
+  console.log('its here')
   const pdf = await page.pdf({
     format: 'A4',
-    path: __dirname + '/pdf/' + projectname,
+    // path: __dirname + '/pdf/' + projectname,
+    path: path.join(__dirname + '/pdf/' + projectname) ,
     // landscape: true,
     printBackground: true,
     margin: {
