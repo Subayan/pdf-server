@@ -119,11 +119,11 @@ fs.readdir(uploadsDir, (err, files) => {
           });
         }
       });
-      fs.readdir(uploadsDir1, (err, files) => {
+      fs.readdir(uploadsDir1, (err, files1) => {
         if (err) throw err;
 
-        for (const file of files) {
-          fs.unlink(path.join(uploadsDir, file), err => {
+        for (const file of files1) {
+          fs.unlink(path.join(uploadsDir1, file), err => {
             if (err) throw err;
       
           });
