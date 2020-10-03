@@ -39,7 +39,7 @@ function randName() {
   return text;
 }
 
-async function printPDF(html, projectname) {
+async function printPDF(html, projectname,landscape) {
   const browser = await puppeteer.launch({
     // ignoreDefaultArgs: ['--disable-extensions'],
     args: [
@@ -69,7 +69,7 @@ async function printPDF(html, projectname) {
     format: 'A4',
     // path: __dirname + '/pdf/' + projectname,
     path: path.join(__dirname + '/pdf/' + projectname) ,
-    landscape: true,
+    landscape: landscape,
     printBackground: true,
     margin: {
       top: 0,
