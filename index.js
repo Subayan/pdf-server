@@ -62,26 +62,18 @@ async function printPDF(html, projectname) {
   // await page.goto(html, {waitUntil: 'networkidle0'});
   await page.setContent(html)
   await page.addStyleTag({
-    // content: '@page { width: 11.7in;height: 8.2in;}',
-    // content: '@page { width: 8.2in;height: 11in;}'
     content: '@page {size: A4 portait;}'
   });
   const pdf = await page.pdf({
-    
-    path: './pdf/' + projectname,
     format: 'A4',
-    landscape: true,
+    path: __dirname + '/pdf/' + projectname,
+    // landscape: true,
     printBackground: true,
-    // margin: {
-    //   top: 0,
-    //   right: 20,
-    //   bottom: 0,
-    //   left: 20,
     margin: {
-        top: '0px',
-        right: '0px',
-        bottom: '0px',
-        left: '0px'
+      top: 0,
+      right: 20,
+      bottom: 0,
+      left: 20
     }
   });
   console.log('End Pdf')
