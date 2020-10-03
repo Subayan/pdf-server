@@ -62,18 +62,27 @@ async function printPDF(html, projectname) {
   // await page.goto(html, {waitUntil: 'networkidle0'});
   await page.setContent(html)
   await page.addStyleTag({
-    content: '@page {size: A4 portait;}'
+    // content: '@page { width: 11.7in;height: 8.2in;}',
+    // content: '@page { width: 8.2in;height: 11in;}'
+    // content: '@page {size: A4 portait;}'
   });
   const pdf = await page.pdf({
-    format: 'A4',
+    
     path: './pdf/' + projectname,
+    format: 'A4',
+    // landscape: true,
     printBackground: true,
+    // margin: {
+    //   top: 0,
+    //   right: 20,
+    //   bottom: 0,
+    //   left: 20,
     margin: {
-      top: 0,
-      right: 20,
-      bottom: 0,
-      left: 20,
-    },
+        top: '0px',
+        right: '0px',
+        bottom: '0px',
+        left: '0px'
+    }
   });
   console.log('End Pdf')
   await browser.close();
@@ -95,8 +104,8 @@ app.use((req,res,next)=>{
   }
   
 })
-// cron.schedule('*/30 * * * * *', () => {
-cron.schedule('0 2 * * *', () => {   // every day at 2 am
+cron.schedule('*/30 * * * * *', () => {
+// cron.schedule('0 2 * * *', () => {   // every day at 2 am
 console.log("nbsajdjsad")
 var uploadsDir = __dirname + '/templatenew';
 var uploadsDir1 = __dirname + '/pdf';
