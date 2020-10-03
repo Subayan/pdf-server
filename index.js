@@ -69,7 +69,7 @@ async function printPDF(html, projectname) {
     format: 'A4',
     // path: __dirname + '/pdf/' + projectname,
     path: path.join(__dirname + '/pdf/' + projectname) ,
-    // landscape: true,
+    landscape: true,
     printBackground: true,
     margin: {
       top: 0,
