@@ -107,7 +107,7 @@ app.use((req,res,next)=>{
 // cron.schedule('*/30 * * * * *', () => {
 cron.schedule('0 2 * * *', () => {  
    // every day at 2 am
-console.log("nbsajdjsad")
+console.log("start ")
 var uploadsDir = __dirname + '/templatenew';
 var uploadsDir1 = __dirname + '/pdf';
 fs.readdir(uploadsDir, (err, files) => {
