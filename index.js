@@ -104,8 +104,9 @@ app.use((req,res,next)=>{
   }
   
 })
-cron.schedule('*/30 * * * * *', () => {
-// cron.schedule('0 2 * * *', () => {   // every day at 2 am
+// cron.schedule('*/30 * * * * *', () => {
+cron.schedule('0 2 * * *', () => {  
+   // every day at 2 am
 console.log("nbsajdjsad")
 var uploadsDir = __dirname + '/templatenew';
 var uploadsDir1 = __dirname + '/pdf';
