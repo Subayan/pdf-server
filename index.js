@@ -64,7 +64,7 @@ async function printPDF(html, projectname) {
   await page.addStyleTag({
     // content: '@page { width: 11.7in;height: 8.2in;}',
     // content: '@page { width: 8.2in;height: 11in;}'
-    // content: '@page {size: A4 portait;}'
+    content: '@page {size: A4 portait;}'
   });
   const pdf = await page.pdf({
     
