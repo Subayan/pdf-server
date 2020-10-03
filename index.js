@@ -128,6 +128,7 @@ fs.readdir(uploadsDir, (err, files) => {
 app.post('/pdfCreation', async (req, res) => {
   try {
     let html = req.body.html
+    let landscape =req.body.landscape
     let newname = randName()
     fs.writeFileSync(path.join(__dirname + '/templatenew/' + newname + '.html'), html);
     // let html = data
