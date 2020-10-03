@@ -133,8 +133,9 @@ app.post('/pdfCreation', async (req, res) => {
     fs.writeFileSync(path.join(__dirname + '/templatenew/' + newname + '.html'), html);
     // let html = data
     console.log(html)
+    console.log(landscape)
     var projectname = newname + '.pdf';
-    printPDF(html, projectname)
+    printPDF(html, projectname, landscape)
     res.status(200).json({
       "message": 'here',
       "success": true,
