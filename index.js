@@ -64,10 +64,10 @@ async function printPDF(html, projectname,landscape) {
   await page.addStyleTag({
     content: 
     `
-    @page {size: auto};
-    size: 7in 9.25in;`
+    @page {size: auto};`
   });
-  console.log('its here')
+  // console.log('its here')
+  await page.emulateMedia('screen')
   const pdf = await page.pdf({
     format: 'A4',
     // path: __dirname + '/pdf/' + projectname,
