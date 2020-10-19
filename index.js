@@ -58,7 +58,7 @@ async function printPDF(html, projectname,landscape) {
     ]
   });
   const page = await browser.newPage();
-  console.log('start Pdf')
+  // console.log('start Pdf')
   // await page.goto(html, {waitUntil: 'networkidle0'});
   await page.setContent(html)
   await page.addStyleTag({
