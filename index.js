@@ -62,7 +62,9 @@ async function printPDF(html, projectname,landscape) {
   // await page.goto(html, {waitUntil: 'networkidle0'});
   await page.setContent(html)
   await page.addStyleTag({
-    content: '@page {size: auto}'
+    content: 
+    `@page {size: auto};
+    @page:first { margin-bottom: 0; `
   });
   console.log('its here')
   const pdf = await page.pdf({
