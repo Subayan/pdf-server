@@ -67,7 +67,7 @@ async function printPDF(html, projectname,landscape) {
     @page {size: auto};`
   });
   // console.log('its here')
-  await page.emulateMedia('screen')
+  // await page.emulateMedia('print')
   const pdf = await page.pdf({
     format: 'A4',
     // path: __dirname + '/pdf/' + projectname,
