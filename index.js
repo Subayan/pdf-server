@@ -64,8 +64,8 @@ async function printPDF(html, projectname,landscape) {
   await page.addStyleTag({
     content: 
     `
-
-    @page:first { margin-bottom: 0; `
+    @page {size: auto};
+    size: 7in 9.25in;`
   });
   console.log('its here')
   const pdf = await page.pdf({
