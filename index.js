@@ -69,8 +69,7 @@ async function printPDF(html, projectname,landscape,marginleft,marginright) {
   // console.log('its here')
   // await page.emulateMedia('print')
   const pdf = await page.pdf({
-    // width: width1 + 'px', 
-    // height: height1 + 'px',
+   
     format: 'A4',
     path: path.join(__dirname + '/pdf/' + projectname) ,
     landscape: landscape,
@@ -136,13 +135,10 @@ app.post('/pdfCreation', async (req, res) => {
     let landscape =req.body.landscape
     let marginleft =req.body.marginleft
     let marginright =req.body.marginright
-    // let width =req.body.width
-    // let height =req.body.height
+   
     let newname = randName()
     fs.writeFileSync(path.join(__dirname + '/templatenew/' + newname + '.html'), html);
-    // let html = data
-    // console.log(html)
-    // console.log(landscape)
+
     var projectname = newname + '.pdf';
     printPDF(html, projectname, landscape,marginleft,marginright)
     res.status(200).json({
