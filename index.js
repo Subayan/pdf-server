@@ -69,10 +69,12 @@ async function printPDF(html, projectname,landscape) {
   // console.log('its here')
   // await page.emulateMedia('print')
   let height = await page.evaluate(() => document.documentElement.offsetHeight);
+  let width = await page.evaluate(() => document.documentElement.offsetWidth);
   // console.log(height)
   const pdf = await page.pdf({
+    width: width  + 'px',
     height: height  + 'px',
-    format: 'A4',
+    // format: 'A4',
     // path: __dirname + '/pdf/' + projectname,
    
     path: path.join(__dirname + '/pdf/' + projectname) ,
