@@ -144,7 +144,7 @@ app.post('/pdfCreation', async (req, res) => {
     // console.log(html)
     // console.log(landscape)
     var projectname = newname + '.pdf';
-    printPDF(html, projectname, landscape,marginleft,marginright,width,height)
+    printPDF(html, projectname, landscape,marginleft,marginright)
     res.status(200).json({
       "message": 'here',
       "success": true,
