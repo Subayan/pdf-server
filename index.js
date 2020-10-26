@@ -72,15 +72,16 @@ async function printPDF(html, projectname,landscape) {
     // format: 'A4',
     // path: __dirname + '/pdf/' + projectname,
     path: path.join(__dirname + '/pdf/' + projectname) ,
+    printBackground: true,
     landscape: landscape,
     // displayHeaderFooter: false,
-    printBackground: true,
-    margin: {
-      top: 0,
-      right: 0,
-      bottom: 0,
-      left: 0
-    }
+   
+    // margin: {
+    //   top: 0,
+    //   right: 0,
+    //   bottom: 0,
+    //   left: 0
+    // }
   });
   console.log('End Pdf')
   await browser.close();
