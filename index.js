@@ -71,7 +71,7 @@ async function printPDF(html, projectname,landscape,marginleft,marginright,width
   const pdf = await page.pdf({
     width: width + 'px', 
     height: height + 'px',
-    format: 'A4',
+    // format: 'A4',
     // path: __dirname + '/pdf/' + projectname,
     path: path.join(__dirname + '/pdf/' + projectname) ,
     landscape: landscape,
