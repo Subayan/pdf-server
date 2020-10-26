@@ -39,7 +39,7 @@ function randName() {
   return text;
 }
 
-async function printPDF(html, projectname,landscape,marginleft,marginright,width1,height1) {
+async function printPDF(html, projectname,landscape,marginleft,marginright) {
   const browser = await puppeteer.launch({
     // ignoreDefaultArgs: ['--disable-extensions'],
     args: [
@@ -69,10 +69,9 @@ async function printPDF(html, projectname,landscape,marginleft,marginright,width
   // console.log('its here')
   // await page.emulateMedia('print')
   const pdf = await page.pdf({
-    width: width1 + 'px', 
-    height: height1 + 'px',
-    // format: 'A4',
-    // path: __dirname + '/pdf/' + projectname,
+    // width: width1 + 'px', 
+    // height: height1 + 'px',
+    format: 'A4',
     path: path.join(__dirname + '/pdf/' + projectname) ,
     landscape: landscape,
     // displayHeaderFooter: false,
@@ -137,8 +136,8 @@ app.post('/pdfCreation', async (req, res) => {
     let landscape =req.body.landscape
     let marginleft =req.body.marginleft
     let marginright =req.body.marginright
-    let width =req.body.width
-    let height =req.body.height
+    // let width =req.body.width
+    // let height =req.body.height
     let newname = randName()
     fs.writeFileSync(path.join(__dirname + '/templatenew/' + newname + '.html'), html);
     // let html = data
