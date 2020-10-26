@@ -76,12 +76,12 @@ async function printPDF(html, projectname,landscape) {
     landscape: landscape,
     // displayHeaderFooter: false,
    
-    // margin: {
-    //   top: 0,
-    //   right: 0,
-    //   bottom: 0,
-    //   left: 0
-    // }
+    margin: {
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0
+    }
   });
   console.log('End Pdf')
   await browser.close();
