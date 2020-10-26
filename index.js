@@ -68,14 +68,16 @@ async function printPDF(html, projectname,landscape) {
   });
   // console.log('its here')
   // await page.emulateMedia('print')
-  const pageHeight = await page.evaluate(() => { window.innerHeight; });
+  let height = await page.evaluate(() => document.documentElement.offsetHeight);
+  // console.log(height)
   const pdf = await page.pdf({
-    format: 'A4',
+    height: height  + 'px',
+    // format: 'A4',
     // path: __dirname + '/pdf/' + projectname,
-    height: pageHeight  + 'px',
+   
     path: path.join(__dirname + '/pdf/' + projectname) ,
     landscape: landscape,
-    displayHeaderFooter: false,
+    // displayHeaderFooter: false,
     printBackground: true,
     margin: {
       top: 0,
