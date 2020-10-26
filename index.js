@@ -89,7 +89,7 @@ async function printPDF(html, projectname,landscape) {
       left: 0
     }
   });
-  console.log('End Pdf')
+  // console.log('End Pdf')
   await browser.close();
   return pdf
 }
