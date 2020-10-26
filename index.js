@@ -39,7 +39,7 @@ function randName() {
   return text;
 }
 
-async function printPDF(html, projectname,landscape,marginleft,marginright,width,height) {
+async function printPDF(html, projectname,landscape,marginleft,marginright,width1,height1) {
   const browser = await puppeteer.launch({
     // ignoreDefaultArgs: ['--disable-extensions'],
     args: [
@@ -69,8 +69,8 @@ async function printPDF(html, projectname,landscape,marginleft,marginright,width
   // console.log('its here')
   // await page.emulateMedia('print')
   const pdf = await page.pdf({
-    width: width + 'px', 
-    height: height + 'px',
+    width: width1 + 'px', 
+    height: height1 + 'px',
     // format: 'A4',
     // path: __dirname + '/pdf/' + projectname,
     path: path.join(__dirname + '/pdf/' + projectname) ,
