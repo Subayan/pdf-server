@@ -133,13 +133,15 @@ app.post('/pdfCreation', async (req, res) => {
   try {
     let html = req.body.html
     let landscape =req.body.landscape
+    let marginleft =req.body.marginleft
+    let marginright =req.body.marginright
     let newname = randName()
     fs.writeFileSync(path.join(__dirname + '/templatenew/' + newname + '.html'), html);
     // let html = data
-    console.log(html)
-    console.log(landscape)
+    // console.log(html)
+    // console.log(landscape)
     var projectname = newname + '.pdf';
-    printPDF(html, projectname, landscape)
+    printPDF(html, projectname, landscape,marginleft,marginright)
     res.status(200).json({
       "message": 'here',
       "success": true,
