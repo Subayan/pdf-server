@@ -64,7 +64,13 @@ async function printPDF(html, projectname,landscape,marginleft,marginright) {
   await page.addStyleTag({
     content: 
     `
-    @page {size: auto};`
+    @page {
+      size: A4 landscape;
+      margin: 0;
+    
+    };
+    
+    `
   });
   // console.log('its here')
   // await page.emulateMedia('print')
