@@ -76,7 +76,7 @@ async function printPDF(html, projectname,landscape,marginleft,marginright) {
   // await page.emulateMedia('print')
   const pdf = await page.pdf({
    
-    format: 'A4',
+    // format: 'A4',
     path: path.join(__dirname + '/pdf/' + projectname) ,
     landscape: landscape,
     // displayHeaderFooter: false,
