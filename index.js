@@ -10,8 +10,7 @@ var util = require("util");
 var bodyParser = require('body-parser');
 var cron = require('node-cron');
 
-const filepath='./letterhead/letterhead-v1.html';
-const cardPath='./card/design-1-v1.html';
+
 
 const multer = require('multer');
 app.use(bodyParser.json());
@@ -21,15 +20,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/')
-  },
-  filename: function (req, file, cb) {
-      cb(null, file.originalname)
-  }
-})
-const multipart = multer({ storage: storage })
+
 // app.use(express.bodyParser({limit: '20mb'})); 
 var dir = './pdf';
 var dir2 = './templatenew';
