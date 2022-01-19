@@ -19,6 +19,17 @@ app.use(bodyParser.urlencoded({
   extended: false,
   limit: '20mb'
 }));
+
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/')
+  },
+  filename: function (req, file, cb) {
+      cb(null, file.originalname)
+  }
+})
+const multipart = multer({ storage: storage })
 // app.use(express.bodyParser({limit: '20mb'})); 
 var dir = './pdf';
 var dir2 = './templatenew';
@@ -178,84 +189,42 @@ app.post('/pdfCreation2', async (req, res) => {
 })
 
 // Code added Letter and card pdf 
-async function printPDFLetter(projectname) {  
+async function printLetterPDF(html, projectname) {
+  const filepath='./uploads/'+html;
 
   const contentData = fs.readFileSync(
-    path.resolve(__dirname, filepath),
-    'utf-8'
-  )
+      path.resolve(__dirname, filepath),
+      'utf-8'
+  )    
+
   const browser = await puppeteer.launch({
-    // ignoreDefaultArgs: ['--disable-extensions'],
-    args: ["--no-sandbox", "--disable-setuid-sandbox", "--enable-local-file-accesses", "--allow-file-access-from-files"],
+      // ignoreDefaultArgs: ['--disable-extensions'],
+      args: ["--no-sandbox", "--disable-setuid-sandbox" ,"--enable-local-file-accesses" ,"--allow-file-access-from-files"],
   });
   const page = await browser.newPage();
-  await page.setViewport({
-    width: 600,
-    height: 600,
-    deviceScaleFactor: 2
-  });
   await page.goto(`file://${process.cwd()}${filepath}`);
-  
+  // console.log('start Pdf')
+  // await page.goto(html, {waitUntil: 'networkidle0'});
   await page.setContent(contentData)
   await page.addStyleTag({
-    content: `
+      content: `
   @page {size: auto};`
-  });
- 
+  }); 
+  // console.log('its here')
+  // await page.emulateMediaType('screen');
   const pdf = await page.pdf({
 
-    format: 'A4',
-    path: path.join(__dirname + '/pdf/' + projectname),
-    
-    printBackground: true,
-    margin: {
-      top: 0,
-      right: 0,
-      bottom: 0,
-      left: 0
-    }
-  });  
-  await browser.close();
-  return pdf
-}
-
-
-
-async function printPDFCard(projectname) {
-
-  const contentData = fs.readFileSync(
-    path.resolve(__dirname, cardPath),
-    'utf-8'
-  )
-  const browser = await puppeteer.launch({   
-    args: ["--no-sandbox", "--disable-setuid-sandbox", "--enable-local-file-accesses", "--allow-file-access-from-files"],
-  }, {
-    headless: false
-  });
-  const page = await browser.newPage();
-  await page.setViewport({
-    width: 600,
-    height: 600,
-    deviceScaleFactor: 2
-  });
-  await page.goto(`file://${process.cwd()}${cardPath}`, {
-    waitUntil: "networkidle2"
-  });
-  await page.setContent(contentData)
-  const pdf = await page.pdf({
-
-    path: path.join(__dirname + '/pdf/' + projectname),
-    printBackground: true,
-    width: '350px',
-    height: '220px',
-    landscape: false,
-
-    margin: {
-      top: 0,
-      right: 0,
-      bottom: 0,
-      left: 0
-    }
+      format: 'A4',
+      path: path.join(__dirname + '/pdf/' + projectname),
+      // landscape: landscape,
+      // displayHeaderFooter: false,
+      printBackground: true,
+      margin: {
+          top: 0,
+          right: 0,
+          bottom: 0,
+          left: 0
+      }
   });
   // console.log('End Pdf')
   await browser.close();
@@ -264,45 +233,119 @@ async function printPDFCard(projectname) {
 
 
 
-app.post('/pdfLetterCreation', async (req, res) => {
+async function printPDFCard(html,projectname) {
+
+  const cardPath='./uploads/'+html;
+  const contentData = fs.readFileSync(
+      path.resolve(__dirname, cardPath),
+      'utf-8'
+  )
+
+  const browser = await puppeteer.launch({
+      // ignoreDefaultArgs: ['--disable-extensions'],
+      args: ["--no-sandbox", "--disable-setuid-sandbox" ,"--enable-local-file-accesses" ,"--allow-file-access-from-files"],
+  },{ headless: false });
+  const page = await browser.newPage();
+   await page.setViewport({width: 1050, height: 600, deviceScaleFactor: 2});
+
+  await page.goto(`file://${process.cwd()}${cardPath}`,{waitUntil:"networkidle2"});
+  
+
+  await page.setContent(contentData)    
+
+
+  const pdf = await page.pdf({
+
+      path: path.join(__dirname + '/pdf/' + projectname),
+      printBackground: true,
+      width: '350px',
+      height:'220px',  
+      landscape:false,      
+
+      margin: {
+          top: 0,
+          right: 0,
+          bottom: 0,
+          left: 0
+      }
+  });
+  // console.log('End Pdf')
+  await browser.close();
+  return pdf
+}
+
+
+app.post('/pdfLetterCreation', multipart.array('page'), async (req, res) => {
   try {
+        let fileName="";
     
-    let newname = randName()    
+      req.files.forEach(file => {
+          if(file.originalname.includes('html')){
+              fileName=file.originalname;              
+          }
+          
+          
+      });
+      let landscape = req.body.landscape
+      let marginleft = req.body.marginleft
+      let marginright = req.body.marginright
 
-    let projectname = newname + '.pdf';  
+      let newname = randName()
+      //  fs.writeFileSync(path.join(__dirname + '/templatenew/' + newname + '.html'), html);
 
-    printPDFLetter(projectname)
-    res.status(200).json({
-      "message": 'here',
-      "success": true,
-      fileName: projectname
-    });
+      console.log(fileName)
+
+      var projectname = newname + '.pdf';
+      // printPDFCard(html, projectname)
+
+      printLetterPDF(fileName,projectname)
+      res.status(200).json({
+          "message": 'here',
+          "success": true,
+          fileName: projectname
+      });
 
 
   } catch (error) {
-    console.log(error)
+      console.log(error)
   }
 })
 
 
 
-app.post('/pdfCardCreation', async (req, res) => {
-  try {   
+app.post('/pdfCardCreation', multipart.array('page'), async (req, res) => {
+  try {
+      let html = req.body.html   
+      
+      let fileName="";
+    
+      req.files.forEach(file => {
+          if(file.originalname.includes('html')){
+              fileName=file.originalname;              
+          }
+          
+          
+      });
 
-    let newname = randName()
-    // fs.writeFileSync(path.join(__dirname + '/templatenew/' + newname + '.html'), html);
-    let projectname = newname + '.pdf';
-    printPDFCard(projectname)
-    res.status(200).json({
-      "message": 'here',
-      "success": true,
-      fileName: projectname
-    });
+      let newname = randName()
+      // fs.writeFileSync(path.join(__dirname + '/templatenew/' + newname + '.html'), html);
+
+      var projectname = newname + '.pdf';
+      printPDFCard(fileName, projectname)
+
+
+      res.status(200).json({
+          "message": 'here',
+          "success": true,
+          fileName: projectname
+      });
+
 
   } catch (error) {
-    console.log(error)
+      console.log(error)
   }
 })
+
 
 
 
