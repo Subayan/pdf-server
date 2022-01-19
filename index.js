@@ -189,35 +189,27 @@ app.post('/pdfCreation2', async (req, res) => {
 })
 
 // Code added Letter and card pdf 
-async function printLetterPDF(html, projectname) {
-  const filepath='./uploads/'+html;
 
-  const contentData = fs.readFileSync(
-      path.resolve(__dirname, filepath),
-      'utf-8'
-  )    
+
+async function printLetterPDF(html, projectname) {
 
   const browser = await puppeteer.launch({
       // ignoreDefaultArgs: ['--disable-extensions'],
-      args: ["--no-sandbox", "--disable-setuid-sandbox" ,"--enable-local-file-accesses" ,"--allow-file-access-from-files"],
+      args: ["--no-sandbox", "--disable-setuid-sandbox", "--enable-local-file-accesses", "--allow-file-access-from-files"],
   });
   const page = await browser.newPage();
-  await page.goto(`file://${process.cwd()}${filepath}`);
+  // await page.goto(`file://${process.cwd()}${filepath}`);
   // console.log('start Pdf')
   // await page.goto(html, {waitUntil: 'networkidle0'});
-  await page.setContent(contentData)
+  await page.setContent(html)
   await page.addStyleTag({
       content: `
   @page {size: auto};`
-  }); 
-  // console.log('its here')
-  // await page.emulateMediaType('screen');
-  const pdf = await page.pdf({
+  });
 
+  const pdf = await page.pdf({
       format: 'A4',
       path: path.join(__dirname + '/pdf/' + projectname),
-      // landscape: landscape,
-      // displayHeaderFooter: false,
       printBackground: true,
       margin: {
           top: 0,
@@ -233,34 +225,29 @@ async function printLetterPDF(html, projectname) {
 
 
 
-async function printPDFCard(html,projectname) {
+async function printPDFCard(html, projectname) {
 
-  const cardPath='./uploads/'+html;
-  const contentData = fs.readFileSync(
-      path.resolve(__dirname, cardPath),
-      'utf-8'
-  )
+
 
   const browser = await puppeteer.launch({
       // ignoreDefaultArgs: ['--disable-extensions'],
-      args: ["--no-sandbox", "--disable-setuid-sandbox" ,"--enable-local-file-accesses" ,"--allow-file-access-from-files"],
-  },{ headless: false });
+      args: ["--no-sandbox", "--disable-setuid-sandbox", "--enable-local-file-accesses", "--allow-file-access-from-files"],
+  });
   const page = await browser.newPage();
-   await page.setViewport({width: 1050, height: 600, deviceScaleFactor: 2});
+  // await page.goto(`file://${process.cwd()}${cardPath}`);
+  await page.addStyleTag({
+      content: `
+  @page {size: auto};`
+  });
 
-  await page.goto(`file://${process.cwd()}${cardPath}`,{waitUntil:"networkidle2"});
-  
-
-  await page.setContent(contentData)    
-
+  await page.setContent(html)
 
   const pdf = await page.pdf({
 
       path: path.join(__dirname + '/pdf/' + projectname),
       printBackground: true,
-      width: '350px',
-      height:'220px',  
-      landscape:false,      
+      width: "350px",
+      height: "220px",
 
       margin: {
           top: 0,
@@ -275,30 +262,16 @@ async function printPDFCard(html,projectname) {
 }
 
 
-app.post('/pdfLetterCreation', multipart.array('page'), async (req, res) => {
+app.post('/pdfLetterCreation', async (req, res) => {
   try {
-        let fileName="";
-    
-      req.files.forEach(file => {
-          if(file.originalname.includes('html')){
-              fileName=file.originalname;              
-          }
-          
-          
-      });
-      let landscape = req.body.landscape
-      let marginleft = req.body.marginleft
-      let marginright = req.body.marginright
+      let html = req.body.html
 
       let newname = randName()
-      //  fs.writeFileSync(path.join(__dirname + '/templatenew/' + newname + '.html'), html);
-
-      console.log(fileName)
+      fs.writeFileSync(path.join(__dirname + '/templatenew/' + newname + '.html'), html);
 
       var projectname = newname + '.pdf';
-      // printPDFCard(html, projectname)
 
-      printLetterPDF(fileName,projectname)
+      printLetterPDF(html, projectname)
       res.status(200).json({
           "message": 'here',
           "success": true,
@@ -313,25 +286,15 @@ app.post('/pdfLetterCreation', multipart.array('page'), async (req, res) => {
 
 
 
-app.post('/pdfCardCreation', multipart.array('page'), async (req, res) => {
+app.post('/pdfCardCreation', async (req, res) => {
   try {
-      let html = req.body.html   
-      
-      let fileName="";
-    
-      req.files.forEach(file => {
-          if(file.originalname.includes('html')){
-              fileName=file.originalname;              
-          }
-          
-          
-      });
+      let html = req.body.html
 
       let newname = randName()
-      // fs.writeFileSync(path.join(__dirname + '/templatenew/' + newname + '.html'), html);
+      fs.writeFileSync(path.join(__dirname + '/templatenew/' + newname + '.html'), html);
 
       var projectname = newname + '.pdf';
-      printPDFCard(fileName, projectname)
+      printPDFCard(html, projectname)
 
 
       res.status(200).json({
@@ -345,7 +308,6 @@ app.post('/pdfCardCreation', multipart.array('page'), async (req, res) => {
       console.log(error)
   }
 })
-
 
 
 
