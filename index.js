@@ -95,6 +95,18 @@ app.get('/', async (req, res) => {
   res.send('ok')
 })
 
+
+
+app.get('/getpdf/:fileName', function (req, res) {
+
+  if (req.params.fileName.startsWith('{{')) {
+    res.sendFile(__dirname + '/pdf/');
+  } else {
+    res.sendFile(__dirname + '/pdf/' + req.params.fileName);
+  }
+
+});
+
 app.use((req, res, next) => {
   let apiKey = req.headers['x-client-key'];
   if (apiKey == process.env.API_KEY) {
@@ -192,6 +204,7 @@ async function printLetterPDF(html, projectname) {
   // await page.goto(`file://${process.cwd()}${filepath}`);
   // console.log('start Pdf')
   // await page.goto(html, {waitUntil: 'networkidle0'});
+  await page.setCacheEnabled(false);
   await page.setContent(html)
   await page.addStyleTag({
       content: `
@@ -217,19 +230,19 @@ async function printLetterPDF(html, projectname) {
 
 
 async function printPDFCard(html, projectname) {
-
-
-
   const browser = await puppeteer.launch({
       // ignoreDefaultArgs: ['--disable-extensions'],
       args: ["--no-sandbox", "--disable-setuid-sandbox", "--enable-local-file-accesses", "--allow-file-access-from-files"],
   });
+  
   const page = await browser.newPage();
   // await page.goto(`file://${process.cwd()}${cardPath}`);
   await page.addStyleTag({
       content: `
   @page {size: auto};`
   });
+
+  await page.setCacheEnabled(false);
 
   await page.setContent(html)
 
