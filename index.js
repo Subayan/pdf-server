@@ -275,7 +275,7 @@ app.post('/pdfLetterCreation', async (req, res) => {
 
       var projectname = newname + '.pdf';
 
-      printLetterPDF(html, projectname)
+      await printLetterPDF(html, projectname)
       res.status(200).json({
           "message": 'here',
           "success": true,
@@ -298,7 +298,7 @@ app.post('/pdfCardCreation', async (req, res) => {
       fs.writeFileSync(path.join(__dirname + '/templatenew/' + newname + '.html'), html);
 
       var projectname = newname + '.pdf';
-      printPDFCard(html, projectname)
+      await printPDFCard(html, projectname)
 
 
       res.status(200).json({
